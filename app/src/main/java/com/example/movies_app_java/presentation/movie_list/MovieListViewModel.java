@@ -11,6 +11,7 @@ import com.example.movies_app_java.domain.use_case.GetMovieListUseCase;
 
 import java.util.ArrayList;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -18,7 +19,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MovieListViewModel extends ViewModel {
     final GetMovieListUseCase _getMovieListUseCase;
     private final CompositeDisposable disposables = new CompositeDisposable();
-    private final MutableLiveData<ArrayList<MovieModel>> movieList = new MutableLiveData<>();
+    private final MutableLiveData<Observable<ArrayList<MovieModel>>> movieList = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
@@ -27,7 +28,7 @@ public class MovieListViewModel extends ViewModel {
     }
 
 
-    public MutableLiveData<ArrayList<MovieModel>> getMovieListLiveData() {
+    public MutableLiveData<Observable<ArrayList<MovieModel>>> getMovieListLiveData() {
         return movieList;
     }
 
@@ -40,9 +41,9 @@ public class MovieListViewModel extends ViewModel {
     }
 
 
-    void getMovieList() throws Exception {
+    void getMovieList() {
         isLoading.setValue(true);
-        disposables.add(_getMovieListUseCase.call()
+        disposables.add(Observable.fromCallable(_getMovieListUseCase::call)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> isLoading.setValue(false))

@@ -18,4 +18,28 @@ public class MovieModel {
         this.releaseDate = releaseDate;
         this.genres = genres;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public ArrayList<String> getGenres() {
+        return genres;
+    }
 }
