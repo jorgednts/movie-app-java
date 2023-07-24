@@ -41,23 +41,23 @@ public class MovieListViewModel extends ViewModel {
     }
 
 
-    void getMovieList() {
+    public void getMovieList() {
         isLoading.setValue(true);
         disposables.add(Observable.fromCallable(_getMovieListUseCase::call)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(() -> isLoading.setValue(false))
                 .subscribe(
-                        movieList::setValue,
+                        movies -> {
+                            movieList.setValue(movies);
+                            isLoading.setValue(false);
+                        },
                         throwable -> {
+                            isLoading.setValue(false);
                             if (throwable instanceof CustomNetworkException) {
-                                isLoading.setValue(false);
                                 errorMessage.setValue("Custom Network Exception occurred");
                             } else if (throwable instanceof GenericErrorException) {
-                                isLoading.setValue(false);
                                 errorMessage.setValue("Generic Error Exception occurred");
                             } else {
-                                isLoading.setValue(false);
                                 errorMessage.setValue("Unknown error occurred");
                             }
                         }

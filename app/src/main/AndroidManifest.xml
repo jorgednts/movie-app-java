@@ -15,9 +15,12 @@
         android:theme="@style/Theme.Moviesappjava"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.movie_details.MovieDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.movie_list.MovieListActivity"
-            android:label="TMDB"
-            android:exported="true">
+            android:exported="true"
+            android:label="TMDB">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
