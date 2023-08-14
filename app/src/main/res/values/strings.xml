@@ -3,4 +3,5 @@
     <string name="released">Released:</string>
     <string name="appTitle">TMDB</string>
     <string name="see_more_button">See More</string>
+    <string name="original_title">Original Title:</string>
 </resources>

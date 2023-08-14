@@ -56,9 +56,8 @@ public class MovieListActivity extends AppCompatActivity {
 
         configureRecyclerView();
 
-        setMovieListObserver();
         setErrorMessageObserver();
-        setLoadingObserver();
+        setMovieListObserver();
 
         viewModel.getMovieList();
     }
@@ -72,7 +71,10 @@ public class MovieListActivity extends AppCompatActivity {
     private void setMovieListObserver() {
         viewModel.getMovieListLiveData().observe(this, movieListObservable -> movieListObservable
                 .subscribe(
-                        adapter::updateData,
+                        movieListData -> {
+                            adapter.updateData(movieListData);
+                            progressBar.setVisibility(View.GONE);
+                        },
                         throwable -> Toast.makeText(this, "Error fetching movie list.", Toast.LENGTH_SHORT).show()
                 )
         );

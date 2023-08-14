@@ -1,7 +1,7 @@
 <resources>
 
-    <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
-        <item name="android:progressTint">@color/primaryColor</item>
+    <style name="ProgressBarStyle" parent="android:Widget.ProgressBar">
+        <item name="android:progressTint">@color/pink</item>
     </style>
 
 </resources>

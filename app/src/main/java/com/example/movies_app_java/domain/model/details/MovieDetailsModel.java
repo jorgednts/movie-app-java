@@ -38,4 +38,68 @@ public class MovieDetailsModel {
         this.title = title;
         this.voteAverage = voteAverage;
     }
+
+    public Boolean getAdult() {
+        return adult;
+    }
+
+    public Integer getBudget() {
+        return budget;
+    }
+
+    public ArrayList<String> getGenres() {
+        return genres;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public ArrayList<ProductionCompanyModel> getProductionCompanies() {
+        return productionCompanies;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public Integer getRevenue() {
+        return revenue;
+    }
+
+    public Integer getRuntime() {
+        return runtime;
+    }
+
+    public ArrayList<String> getSpokenLanguages() {
+        return spokenLanguages;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
 }
