@@ -4,4 +4,9 @@
     <string name="appTitle">TMDB</string>
     <string name="see_more_button">See More</string>
     <string name="original_title">Original Title:</string>
+    <string name="status">Status:</string>
+    <string name="see_more">See More:</string>
+    <string name="production_companies">Production Companies:</string>
+    <string name="revenue">Revenue:</string>
+    <string name="available_in">Available in:</string>
 </resources>

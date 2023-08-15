@@ -112,6 +112,7 @@
         android:backgroundTint="@color/pink"
         android:text="@string/see_more_button"
         android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/poster"
