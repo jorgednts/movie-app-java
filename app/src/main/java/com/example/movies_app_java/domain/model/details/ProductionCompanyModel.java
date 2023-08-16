@@ -12,4 +12,20 @@ public class ProductionCompanyModel {
         this.name = name;
         this.originCountry = originCountry;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getOriginCountry() {
+        return originCountry;
+    }
 }

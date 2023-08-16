@@ -145,6 +145,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/background1">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/genreList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_horizontal_list" />
+
                 <View
                     android:id="@+id/divider"
                     android:layout_width="0dp"
@@ -154,7 +166,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/genreList" />
 
                 <ImageView
                     android:id="@+id/ratingIcon"
@@ -268,6 +280,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/seeMore" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/productionCompanies"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/productionCompaniesTag"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_horizontal_list" />
+
                 <TextView
                     android:id="@+id/revenueTag"
                     android:layout_width="wrap_content"
@@ -281,7 +305,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/productionCompaniesTag" />
+                    app:layout_constraintTop_toBottomOf="@id/productionCompanies" />
 
 
                 <TextView
@@ -297,7 +321,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@id/revenueTag"
-                    app:layout_constraintTop_toBottomOf="@id/productionCompaniesTag" />
+                    app:layout_constraintTop_toTopOf="@id/revenueTag"
+                    app:layout_constraintBottom_toBottomOf="@id/revenueTag"/>
 
                 <TextView
                     android:id="@+id/availableTag"
@@ -313,6 +338,19 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/revenueTag" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/availableIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/availableTag"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_horizontal_list_borderless" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

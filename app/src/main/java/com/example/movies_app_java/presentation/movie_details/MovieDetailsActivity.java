@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.movies_app_java.R;
@@ -18,9 +20,15 @@ import com.example.movies_app_java.data.remote.data_source.MovieRemoteDataSource
 import com.example.movies_app_java.data.remote.data_source.MoviesRemoteDataSource;
 import com.example.movies_app_java.data.repository.MovieRepositoryImpl;
 import com.example.movies_app_java.domain.model.details.MovieDetailsModel;
+import com.example.movies_app_java.domain.model.details.ProductionCompanyModel;
 import com.example.movies_app_java.domain.repository.MovieRepository;
 import com.example.movies_app_java.domain.use_case.GetMovieDetailsUseCase;
 import com.example.movies_app_java.domain.use_case.GetMovieDetailsUseCaseImpl;
+import com.example.movies_app_java.presentation.common.HorizontalListAdapter;
+import com.example.movies_app_java.presentation.movie_list.HorizontalListBorderlessAdapter;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import retrofit2.Retrofit;
 
@@ -40,10 +48,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
     TextView duration;
     ConstraintLayout successLayout;
     ImageView poster;
+    RecyclerView genreList;
     TextView overview;
     TextView status;
     TextView rating;
+    RecyclerView productionCompanies;
     TextView revenue;
+    RecyclerView availableIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +70,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         successLayout = findViewById(R.id.successLayout);
         poster = findViewById(R.id.poster);
+        genreList = findViewById(R.id.genreList);
         overview = findViewById(R.id.overview);
 
         status = findViewById(R.id.status);
         rating = findViewById(R.id.rating);
 
+        productionCompanies = findViewById(R.id.productionCompanies);
         revenue = findViewById(R.id.revenue);
+        availableIn = findViewById(R.id.availableIn);
 
         int movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, -1);
         moviesRemoteDataSource = new MovieRemoteDataSourceImpl(getMovieDataService());
@@ -114,12 +128,24 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 .placeholder(R.drawable.ic_loading)
                 .error(R.drawable.ic_error)
                 .into(poster);
+        genreList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        HorizontalListAdapter adapter = new HorizontalListAdapter(movieDetails.getGenres());
+        genreList.setAdapter(adapter);
         overview.setText(movieDetails.getOverview());
 
-        rating.setText(String.valueOf(movieDetails.getVoteAverage())+ "/10");
+        rating.setText(String.valueOf(movieDetails.getVoteAverage()) + "/10");
         status.setText(movieDetails.getStatus());
 
+        ArrayList<String> productionCompaniesNames = movieDetails.getProductionCompanies()
+                .stream().map(ProductionCompanyModel::getName)
+                .collect(Collectors.toCollection(ArrayList::new));
+        productionCompanies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        HorizontalListAdapter productionCompaniesAdapter = new HorizontalListAdapter(productionCompaniesNames);
+        productionCompanies.setAdapter(productionCompaniesAdapter);
         revenue.setText("$" + movieDetails.getBudget());
+        availableIn.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        HorizontalListBorderlessAdapter availableInAdapter = new HorizontalListBorderlessAdapter(movieDetails.getSpokenLanguages());
+        availableIn.setAdapter(availableInAdapter);
     }
 
     private MovieDataService getMovieDataService() {
