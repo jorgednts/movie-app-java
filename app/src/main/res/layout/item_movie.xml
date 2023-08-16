@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="8dp"
     android:background="@drawable/round_border_background"
     android:elevation="4dp"
@@ -61,18 +62,18 @@
         app:layout_constraintStart_toEndOf="@id/ratingIcon"
         app:layout_constraintTop_toBottomOf="@id/movieTitle" />
 
-    <LinearLayout
-        android:id="@+id/genreLinearLayout"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/genreList"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:layout_marginStart="12dp"
+        android:layout_margin="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/released"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/poster"
-        app:layout_constraintTop_toBottomOf="@id/ratingIcon" />
+        app:layout_constraintTop_toBottomOf="@id/ratingIcon"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_horizontal_list" />
 
     <TextView
         android:id="@+id/released"
@@ -87,7 +88,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/poster"
-        app:layout_constraintTop_toBottomOf="@id/genreLinearLayout" />
+        app:layout_constraintTop_toBottomOf="@id/genreList" />
 
     <TextView
         android:id="@+id/releaseDate"

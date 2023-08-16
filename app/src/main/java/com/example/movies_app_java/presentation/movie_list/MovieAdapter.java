@@ -1,23 +1,21 @@
 package com.example.movies_app_java.presentation.movie_list;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.movies_app_java.R;
 import com.example.movies_app_java.domain.model.movie.MovieModel;
+import com.example.movies_app_java.presentation.common.HorizontalListAdapter;
 
 import java.util.List;
 
@@ -69,21 +67,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         private final TextView titleTextView;
         private final TextView releaseDateTextView;
         private final TextView ratingTextView;
-        private final LinearLayout genreLinearLayout;
         private final ImageView posterImageView;
-        private final Context context;
-
         private final Button button;
+        private final RecyclerView genreList;
 
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.movieTitle);
             releaseDateTextView = itemView.findViewById(R.id.releaseDate);
             ratingTextView = itemView.findViewById(R.id.rating);
-            genreLinearLayout = itemView.findViewById(R.id.genreLinearLayout);
             posterImageView = itemView.findViewById(R.id.poster);
             button = itemView.findViewById(R.id.button);
-            context = itemView.getContext();
+            genreList = itemView.findViewById(R.id.genreList);
         }
 
         public void bind(MovieModel movie) {
@@ -97,25 +92,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                     .error(R.drawable.ic_error)
                     .into(posterImageView);
 
-            genreLinearLayout.removeAllViews();
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            int marginEnd = context.getResources().getDimensionPixelSize(R.dimen.genre_margin_end);
-
-            for (String genre : movie.getGenres()) {
-                TextView genreTextView = new TextView(itemView.getContext());
-                genreTextView.setText(genre);
-                genreTextView.setTextColor(Color.WHITE);
-                genreTextView.setTextSize(12);
-                genreTextView.setBackgroundResource(R.drawable.chip_background_border);
-                genreTextView.setTypeface(null, Typeface.BOLD);
-                layoutParams.setMarginEnd(marginEnd);
-                genreTextView.setLayoutParams(layoutParams);
-                genreLinearLayout.addView(genreTextView);
-            }
+            genreList.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
+            HorizontalListAdapter adapter = new HorizontalListAdapter(movie.getGenres());
+            genreList.setAdapter(adapter);
         }
     }
 }
