@@ -14,7 +14,7 @@ public class GetMovieDetailsUseCaseImpl implements GetMovieDetailsUseCase {
     }
 
     @Override
-    public Observable<MovieDetailsModel> call(int movieId) throws Exception {
+    public Observable<MovieDetailsModel> call(int movieId) {
         return _movieRepository.getMovieDetails(movieId);
     }
 }

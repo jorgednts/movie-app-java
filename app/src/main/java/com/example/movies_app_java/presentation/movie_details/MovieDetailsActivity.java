@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -24,6 +23,7 @@ import com.example.movies_app_java.domain.model.details.ProductionCompanyModel;
 import com.example.movies_app_java.domain.repository.MovieRepository;
 import com.example.movies_app_java.domain.use_case.GetMovieDetailsUseCase;
 import com.example.movies_app_java.domain.use_case.GetMovieDetailsUseCaseImpl;
+import com.example.movies_app_java.presentation.common.ErrorFragment;
 import com.example.movies_app_java.presentation.common.HorizontalListAdapter;
 import com.example.movies_app_java.presentation.movie_list.HorizontalListBorderlessAdapter;
 
@@ -55,6 +55,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     RecyclerView productionCompanies;
     TextView revenue;
     RecyclerView availableIn;
+    View errorView;
+    private ErrorFragment errorFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_movie_details);
         progressBar = findViewById(R.id.progressBar);
+        errorView = findViewById(R.id.errorView);
+        errorView.setVisibility(View.GONE);
+        errorFragment = new ErrorFragment(false);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.errorView, errorFragment)
+                .commit();
+
         originalLanguage = findViewById(R.id.originalLanguage);
         originalTitle = findViewById(R.id.originalTitle);
         originalTitleTag = findViewById(R.id.originalTitleTag);
@@ -87,6 +96,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         viewModel = new MovieDetailsViewModel(getMovieDetailsUseCase);
 
         setLoadingObserver();
+        setErrorMessageObserver();
         setMovieDetailsDataObserver();
 
         viewModel.getMovieDetails(movieId);
@@ -96,24 +106,34 @@ public class MovieDetailsActivity extends AppCompatActivity {
         viewModel.getIsLoading().observe(this, isLoading -> {
             if (isLoading) {
                 setTitle("Loading...");
+                errorView.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void setErrorMessageObserver() {
+        viewModel.getErrorMessage().observe(this, errorMessage ->
+        {
+            if (errorMessage.equals("")) {
+                errorView.setVisibility(View.GONE);
+            } else {
+                errorFragment.showError(errorMessage);
+                setTitle("");
+                successLayout.setVisibility(View.GONE);
+                errorView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
 
     private void setMovieDetailsDataObserver() {
-        viewModel.getMovieDetailsLiveData().observe(this, movieDetailsObservable -> movieDetailsObservable
-                .subscribe(
-                        movieDetails -> {
-                            setTitle(movieDetails.getTitle());
-                            configureView(movieDetails);
-                        },
-                        throwable -> Toast.makeText(this, "Error fetching movie list.", Toast.LENGTH_SHORT).show()
-                ));
+        viewModel.getMovieDetailsLiveData().observe(this, this::configureView);
     }
 
     private void configureView(MovieDetailsModel movieDetails) {
         progressBar.setVisibility(View.GONE);
         successLayout.setVisibility(View.VISIBLE);
+        setTitle(movieDetails.getTitle());
 
         originalTitle.setText(movieDetails.getOriginalTitle());
         String language = "(" + movieDetails.getOriginalLanguage().toUpperCase() + ")";
@@ -121,7 +141,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
 
         releaseDate.setText(movieDetails.getReleaseDate());
-        duration.setText(String.valueOf(movieDetails.getRuntime()) + " min.");
+        duration.setText(movieDetails.getRuntime() + " min.");
 
         Glide.with(this)
                 .load(movieDetails.getPosterUrl())
@@ -133,7 +153,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         genreList.setAdapter(adapter);
         overview.setText(movieDetails.getOverview());
 
-        rating.setText(String.valueOf(movieDetails.getVoteAverage()) + "/10");
+        rating.setText(movieDetails.getVoteAverage() + "/10");
         status.setText(movieDetails.getStatus());
 
         ArrayList<String> productionCompaniesNames = movieDetails.getProductionCompanies()

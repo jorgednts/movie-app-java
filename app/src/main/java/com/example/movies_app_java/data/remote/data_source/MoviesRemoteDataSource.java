@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import io.reactivex.Observable;
 
 public interface MoviesRemoteDataSource {
-    Observable<MovieDetailsModel> getMovieDetails(int movieId) throws Exception;
+    Observable<MovieDetailsModel> getMovieDetails(int movieId);
 
-    Observable<ArrayList<MovieModel>> getMovieList() throws Exception;
+    Observable<ArrayList<MovieModel>> getMovieList();
 }

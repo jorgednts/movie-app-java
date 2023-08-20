@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +18,7 @@ import com.example.movies_app_java.data.repository.MovieRepositoryImpl;
 import com.example.movies_app_java.domain.repository.MovieRepository;
 import com.example.movies_app_java.domain.use_case.GetMovieListUseCase;
 import com.example.movies_app_java.domain.use_case.GetMovieListUseCaseImpl;
+import com.example.movies_app_java.presentation.common.ErrorFragment;
 import com.example.movies_app_java.presentation.movie_details.MovieDetailsActivity;
 
 import java.util.ArrayList;
@@ -34,6 +34,8 @@ public class MovieListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     MovieAdapter adapter;
     ProgressBar progressBar;
+    View errorView;
+    private ErrorFragment errorFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,11 @@ public class MovieListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_list);
         progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.movieListRecyclerView);
+        errorView = findViewById(R.id.errorView);
+        errorFragment = new ErrorFragment(true);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.errorView, errorFragment)
+                .commit();
 
         moviesRemoteDataSource = new MovieRemoteDataSourceImpl(getMovieDataService());
         movieRepository = new MovieRepositoryImpl(moviesRemoteDataSource);
@@ -56,6 +63,7 @@ public class MovieListActivity extends AppCompatActivity {
 
         configureRecyclerView();
 
+        setLoadingObserver();
         setErrorMessageObserver();
         setMovieListObserver();
 
@@ -69,21 +77,23 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     private void setMovieListObserver() {
-        viewModel.getMovieListLiveData().observe(this, movieListObservable -> movieListObservable
-                .subscribe(
-                        movieListData -> {
-                            adapter.updateData(movieListData);
-                            progressBar.setVisibility(View.GONE);
-                        },
-                        throwable -> Toast.makeText(this, "Error fetching movie list.", Toast.LENGTH_SHORT).show()
-                )
+        viewModel.getMovieListLiveData().observe(this, movieListData -> {
+                    adapter.updateData(movieListData);
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
         );
     }
 
     private void setErrorMessageObserver() {
         viewModel.getErrorMessageLiveData().observe(this, errorMessage -> {
-            if (errorMessage != null) {
-                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+            if (errorMessage.equals("")) {
+                errorView.setVisibility(View.GONE);
+            } else {
+                errorView.setVisibility(View.VISIBLE);
+                errorFragment.showError(errorMessage);
+                recyclerView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -91,9 +101,8 @@ public class MovieListActivity extends AppCompatActivity {
     private void setLoadingObserver() {
         viewModel.getIsLoading().observe(this, isLoading -> {
             if (isLoading) {
-                progressBar.setVisibility(View.VISIBLE);
-            } else {
-                progressBar.setVisibility(View.GONE);
+                errorView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
             }
         });
     }

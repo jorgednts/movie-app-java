@@ -15,7 +15,7 @@ public class GetMovieListUseCaseImpl implements GetMovieListUseCase {
     }
 
     @Override
-    public Observable<ArrayList<MovieModel>> call() throws Exception {
+    public Observable<ArrayList<MovieModel>> call() {
         return _movieRepository.getMovieList();
     }
 }

@@ -7,6 +7,6 @@ import java.util.ArrayList;
 import io.reactivex.Observable;
 
 public interface GetMovieListUseCase {
-    Observable<ArrayList<MovieModel>> call() throws Exception;
+    Observable<ArrayList<MovieModel>> call();
 }
 

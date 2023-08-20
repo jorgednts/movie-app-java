@@ -19,15 +19,13 @@ public class MovieRepositoryImpl implements MovieRepository {
 
 
     @Override
-    public Observable<MovieDetailsModel> getMovieDetails(int movieId) throws Exception {
+    public Observable<MovieDetailsModel> getMovieDetails(int movieId){
         return _moviesRemoteDataSource.getMovieDetails(movieId);
     }
 
     @Override
-    public Observable<ArrayList<MovieModel>> getMovieList() throws Exception {
-
+    public Observable<ArrayList<MovieModel>> getMovieList(){
         return _moviesRemoteDataSource.getMovieList();
-
     }
 
 }

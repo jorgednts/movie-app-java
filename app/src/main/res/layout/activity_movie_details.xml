@@ -151,10 +151,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:listitem="@layout/item_horizontal_list" />
 
                 <View
@@ -286,10 +286,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/productionCompaniesTag"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/productionCompaniesTag"
                     tools:listitem="@layout/item_horizontal_list" />
 
                 <TextView
@@ -318,11 +318,11 @@
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/revenueTag"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@id/revenueTag"
-                    app:layout_constraintTop_toTopOf="@id/revenueTag"
-                    app:layout_constraintBottom_toBottomOf="@id/revenueTag"/>
+                    app:layout_constraintTop_toTopOf="@id/revenueTag" />
 
                 <TextView
                     android:id="@+id/availableTag"
@@ -345,11 +345,11 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/availableTag"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/availableTag"
                     tools:listitem="@layout/item_horizontal_list_borderless" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -357,5 +357,19 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/errorView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <include layout="@layout/fragment_error" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,21 +5,17 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.movies_app_java.domain.exception.CustomNetworkException;
-import com.example.movies_app_java.domain.exception.GenericErrorException;
 import com.example.movies_app_java.domain.model.movie.MovieModel;
 import com.example.movies_app_java.domain.use_case.GetMovieListUseCase;
 
 import java.util.ArrayList;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class MovieListViewModel extends ViewModel {
     final GetMovieListUseCase _getMovieListUseCase;
     private final CompositeDisposable disposables = new CompositeDisposable();
-    private final MutableLiveData<Observable<ArrayList<MovieModel>>> movieList = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<MovieModel>> movieList = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
@@ -27,8 +23,7 @@ public class MovieListViewModel extends ViewModel {
         _getMovieListUseCase = getMovieListUseCase;
     }
 
-
-    public MutableLiveData<Observable<ArrayList<MovieModel>>> getMovieListLiveData() {
+    public MutableLiveData<ArrayList<MovieModel>> getMovieListLiveData() {
         return movieList;
     }
 
@@ -43,25 +38,23 @@ public class MovieListViewModel extends ViewModel {
 
     public void getMovieList() {
         isLoading.setValue(true);
-        disposables.add(Observable.fromCallable(_getMovieListUseCase::call)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        errorMessage.setValue("");
+        disposables.add(_getMovieListUseCase.call()
                 .subscribe(
-                        movies -> {
-                            movieList.setValue(movies);
+                        movieListData -> {
+                            movieList.setValue(movieListData);
                             isLoading.setValue(false);
                         },
                         throwable -> {
                             isLoading.setValue(false);
                             if (throwable instanceof CustomNetworkException) {
-                                errorMessage.setValue("Custom Network Exception occurred");
-                            } else if (throwable instanceof GenericErrorException) {
-                                errorMessage.setValue("Generic Error Exception occurred");
+                                errorMessage.setValue("Network error!");
                             } else {
-                                errorMessage.setValue("Unknown error occurred");
+                                errorMessage.setValue("An error has occurred!");
                             }
                         }
-                ));
+                )
+        );
     }
 
     @Override
