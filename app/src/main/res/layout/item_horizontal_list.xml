@@ -12,7 +12,7 @@
         android:paddingHorizontal="10dp"
         android:paddingVertical="8dp"
         android:text="Exemplo"
-        android:textColor="@color/white"
+        android:textColor="@color/textWhite"
         android:textSize="14sp" />
 
 </LinearLayout>

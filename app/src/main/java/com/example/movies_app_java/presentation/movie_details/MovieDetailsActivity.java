@@ -62,14 +62,25 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        int movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, -1);
+
+        setViews();
+
+        instantiateDependencies();
+
+        setErrorFragment(movieId);
+        setLoadingObserver();
+        setErrorMessageObserver();
+        setMovieDetailsDataObserver();
+
+        viewModel.getMovieDetails(movieId);
+    }
+
+    private void setViews() {
         setContentView(R.layout.activity_movie_details);
         progressBar = findViewById(R.id.progressBar);
         errorView = findViewById(R.id.errorView);
         errorView.setVisibility(View.GONE);
-        errorFragment = new ErrorFragment(false);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.errorView, errorFragment)
-                .commit();
 
         originalLanguage = findViewById(R.id.originalLanguage);
         originalTitle = findViewById(R.id.originalTitle);
@@ -88,18 +99,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
         productionCompanies = findViewById(R.id.productionCompanies);
         revenue = findViewById(R.id.revenue);
         availableIn = findViewById(R.id.availableIn);
+    }
 
-        int movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, -1);
+    private void instantiateDependencies() {
         moviesRemoteDataSource = new MovieRemoteDataSourceImpl(getMovieDataService());
         movieRepository = new MovieRepositoryImpl(moviesRemoteDataSource);
         getMovieDetailsUseCase = new GetMovieDetailsUseCaseImpl(movieRepository);
         viewModel = new MovieDetailsViewModel(getMovieDetailsUseCase);
+    }
 
-        setLoadingObserver();
-        setErrorMessageObserver();
-        setMovieDetailsDataObserver();
-
-        viewModel.getMovieDetails(movieId);
+    private void setErrorFragment(int movieId) {
+        errorFragment = new ErrorFragment(false);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.errorView, errorFragment)
+                .commit();
+        errorFragment.setOnRetryButtonClickListener(() -> viewModel.getMovieDetails(movieId));
     }
 
     private void setLoadingObserver() {
@@ -107,6 +121,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
             if (isLoading) {
                 setTitle("Loading...");
                 errorView.setVisibility(View.GONE);
+                successLayout.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
             }
         });
     }

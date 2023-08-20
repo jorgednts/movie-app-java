@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:text="Exemplo"
-        android:textColor="@color/white"
+        android:textColor="@color/textWhite"
         android:textSize="16sp"
         android:textStyle="bold" />
 

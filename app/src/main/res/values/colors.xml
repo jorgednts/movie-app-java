@@ -6,5 +6,5 @@
     <color name="lightBlue">#FF36a4fd</color>
     <color name="pink">#FFec4b68</color>
     <color name="gold">#FFebc325</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="textWhite">#FFFFFFFF</color>
 </resources>

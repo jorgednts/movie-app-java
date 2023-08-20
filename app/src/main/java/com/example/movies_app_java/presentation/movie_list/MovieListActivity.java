@@ -41,26 +41,12 @@ public class MovieListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_movie_list);
-        progressBar = findViewById(R.id.progressBar);
-        recyclerView = findViewById(R.id.movieListRecyclerView);
-        errorView = findViewById(R.id.errorView);
-        errorFragment = new ErrorFragment(true);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.errorView, errorFragment)
-                .commit();
+        setViews();
 
-        moviesRemoteDataSource = new MovieRemoteDataSourceImpl(getMovieDataService());
-        movieRepository = new MovieRepositoryImpl(moviesRemoteDataSource);
-        getMovieListUseCase = new GetMovieListUseCaseImpl(movieRepository);
-        viewModel = new MovieListViewModel(getMovieListUseCase);
-        adapter = new MovieAdapter(new ArrayList<>());
-        adapter.setOnButtonClickListener(movieId -> {
-            Intent intent = new Intent(getApplicationContext(), MovieDetailsActivity.class);
-            intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
-            startActivity(intent);
-        });
+        instantiateDependencies();
 
+        setMovieAdapter();
+        setErrorFragment();
         configureRecyclerView();
 
         setLoadingObserver();
@@ -68,6 +54,20 @@ public class MovieListActivity extends AppCompatActivity {
         setMovieListObserver();
 
         viewModel.getMovieList();
+    }
+
+    private void setViews() {
+        setContentView(R.layout.activity_movie_list);
+        progressBar = findViewById(R.id.progressBar);
+        recyclerView = findViewById(R.id.movieListRecyclerView);
+        errorView = findViewById(R.id.errorView);
+    }
+
+    private void instantiateDependencies() {
+        moviesRemoteDataSource = new MovieRemoteDataSourceImpl(getMovieDataService());
+        movieRepository = new MovieRepositoryImpl(moviesRemoteDataSource);
+        getMovieListUseCase = new GetMovieListUseCaseImpl(movieRepository);
+        viewModel = new MovieListViewModel(getMovieListUseCase);
     }
 
     private void configureRecyclerView() {
@@ -103,8 +103,27 @@ public class MovieListActivity extends AppCompatActivity {
             if (isLoading) {
                 errorView.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void setMovieAdapter() {
+        adapter = new MovieAdapter(new ArrayList<>());
+        adapter.setOnButtonClickListener(movieId -> {
+            Intent intent = new Intent(getApplicationContext(), MovieDetailsActivity.class);
+            intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
+            startActivity(intent);
+        });
+    }
+
+    private void setErrorFragment() {
+        errorFragment = new ErrorFragment(true);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.errorView, errorFragment)
+                .commit();
+        errorFragment.setOnRetryButtonClickListener(() ->
+                viewModel.getMovieList());
     }
 
     private MovieDataService getMovieDataService() {
