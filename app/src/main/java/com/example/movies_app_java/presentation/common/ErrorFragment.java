@@ -1,8 +1,6 @@
 package com.example.movies_app_java.presentation.common;
 
-import static com.example.movies_app_java.R.color.lightBlue;
 import static com.example.movies_app_java.R.color.primaryColor;
-import static com.example.movies_app_java.R.color.secondaryColor;
 import static com.example.movies_app_java.R.color.textWhite;
 
 import android.os.Bundle;
@@ -18,7 +16,6 @@ import com.example.movies_app_java.R;
 
 public class ErrorFragment extends Fragment {
     private TextView errorTextView;
-    private Button retryButton;
     private final boolean isMainActivity;
     private OnRetryButtonClickListener onRetryButtonClickListener;
 
@@ -33,7 +30,7 @@ public class ErrorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_error, container, false);
-        retryButton = view.findViewById(R.id.retryButton);
+        Button retryButton = view.findViewById(R.id.retryButton);
         errorTextView = view.findViewById(R.id.errorMessage);
 
         retryButton.setOnClickListener(v -> onRetryButtonClickListener.onButtonClick());
