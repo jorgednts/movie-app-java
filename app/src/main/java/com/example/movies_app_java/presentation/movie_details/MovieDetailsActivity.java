@@ -25,6 +25,7 @@ import com.example.movies_app_java.domain.use_case.GetMovieDetailsUseCase;
 import com.example.movies_app_java.domain.use_case.GetMovieDetailsUseCaseImpl;
 import com.example.movies_app_java.presentation.common.ErrorFragment;
 import com.example.movies_app_java.presentation.common.HorizontalListAdapter;
+import com.example.movies_app_java.presentation.common.StringUtils;
 import com.example.movies_app_java.presentation.movie_list.HorizontalListBorderlessAdapter;
 
 import java.util.ArrayList;
@@ -157,7 +158,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
 
         releaseDate.setText(movieDetails.getReleaseDate());
-        duration.setText(movieDetails.getRuntime() + " min.");
+        duration.setText(getString(R.string.movie_duration_format, movieDetails.getRuntime()));
 
         Glide.with(this)
                 .load(movieDetails.getPosterUrl())
@@ -169,7 +170,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         genreList.setAdapter(adapter);
         overview.setText(movieDetails.getOverview());
 
-        rating.setText(movieDetails.getVoteAverage() + "/10");
+        rating.setText(getString(R.string.movie_vote_average_format, movieDetails.getVoteAverage()));
         status.setText(movieDetails.getStatus());
 
         ArrayList<String> productionCompaniesNames = movieDetails.getProductionCompanies()
@@ -178,7 +179,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         productionCompanies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         HorizontalListAdapter productionCompaniesAdapter = new HorizontalListAdapter(productionCompaniesNames);
         productionCompanies.setAdapter(productionCompaniesAdapter);
-        revenue.setText("$" + movieDetails.getBudget());
+        revenue.setText(getString(R.string.movie_budget_format, StringUtils.formatInt(movieDetails.getBudget())));
         availableIn.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         HorizontalListBorderlessAdapter availableInAdapter = new HorizontalListBorderlessAdapter(movieDetails.getSpokenLanguages());
         availableIn.setAdapter(availableInAdapter);
