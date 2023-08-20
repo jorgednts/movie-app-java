@@ -10,27 +10,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movies_app_java.R;
-import com.example.movies_app_java.data.api.Api;
-import com.example.movies_app_java.data.api.MovieDataService;
-import com.example.movies_app_java.data.remote.data_source.MovieRemoteDataSourceImpl;
-import com.example.movies_app_java.data.remote.data_source.MoviesRemoteDataSource;
-import com.example.movies_app_java.data.repository.MovieRepositoryImpl;
-import com.example.movies_app_java.domain.repository.MovieRepository;
-import com.example.movies_app_java.domain.use_case.GetMovieListUseCase;
-import com.example.movies_app_java.domain.use_case.GetMovieListUseCaseImpl;
+import com.example.movies_app_java.di.ApplicationComponent;
+import com.example.movies_app_java.di.DaggerApplicationComponent;
 import com.example.movies_app_java.presentation.common.ErrorFragment;
 import com.example.movies_app_java.presentation.movie_details.MovieDetailsActivity;
 
 import java.util.ArrayList;
 
-import retrofit2.Retrofit;
+import javax.inject.Inject;
 
 public class MovieListActivity extends AppCompatActivity {
 
-    MoviesRemoteDataSource moviesRemoteDataSource;
-    MovieRepository movieRepository;
-    GetMovieListUseCase getMovieListUseCase;
+    @Inject
     MovieListViewModel viewModel;
+
     RecyclerView recyclerView;
     MovieAdapter adapter;
     ProgressBar progressBar;
@@ -40,10 +33,10 @@ public class MovieListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ApplicationComponent component = DaggerApplicationComponent.create();
+        component.injectInMovieListActivity(this);
 
         setViews();
-
-        instantiateDependencies();
 
         setMovieAdapter();
         setErrorFragment();
@@ -61,13 +54,6 @@ public class MovieListActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.movieListRecyclerView);
         errorView = findViewById(R.id.errorView);
-    }
-
-    private void instantiateDependencies() {
-        moviesRemoteDataSource = new MovieRemoteDataSourceImpl(getMovieDataService());
-        movieRepository = new MovieRepositoryImpl(moviesRemoteDataSource);
-        getMovieListUseCase = new GetMovieListUseCaseImpl(movieRepository);
-        viewModel = new MovieListViewModel(getMovieListUseCase);
     }
 
     private void configureRecyclerView() {
@@ -124,10 +110,5 @@ public class MovieListActivity extends AppCompatActivity {
                 .commit();
         errorFragment.setOnRetryButtonClickListener(() ->
                 viewModel.getMovieList());
-    }
-
-    private MovieDataService getMovieDataService() {
-        Retrofit retrofit = Api.setupRetrofit();
-        return retrofit.create(MovieDataService.class);
     }
 }
