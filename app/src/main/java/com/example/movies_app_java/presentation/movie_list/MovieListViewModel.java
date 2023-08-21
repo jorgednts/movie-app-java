@@ -13,14 +13,15 @@ import java.util.ArrayList;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class MovieListViewModel extends ViewModel {
-    final GetMovieListUseCase _getMovieListUseCase;
+
+    private final GetMovieListUseCase getMovieListUseCase;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final MutableLiveData<ArrayList<MovieModel>> movieList = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     public MovieListViewModel(GetMovieListUseCase getMovieListUseCase) {
-        _getMovieListUseCase = getMovieListUseCase;
+        this.getMovieListUseCase = getMovieListUseCase;
     }
 
     public MutableLiveData<ArrayList<MovieModel>> getMovieListLiveData() {
@@ -39,7 +40,7 @@ public class MovieListViewModel extends ViewModel {
     public void getMovieList() {
         isLoading.setValue(true);
         errorMessage.setValue("");
-        disposables.add(_getMovieListUseCase.call()
+        disposables.add(getMovieListUseCase.call()
                 .subscribe(
                         movieListData -> {
                             movieList.setValue(movieListData);

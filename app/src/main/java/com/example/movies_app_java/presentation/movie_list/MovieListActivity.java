@@ -6,10 +6,12 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.ObservableField;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movies_app_java.R;
+import com.example.movies_app_java.databinding.ActivityMovieListBinding;
 import com.example.movies_app_java.di.ApplicationComponent;
 import com.example.movies_app_java.di.DaggerApplicationComponent;
 import com.example.movies_app_java.presentation.common.ErrorFragment;
@@ -23,78 +25,72 @@ public class MovieListActivity extends AppCompatActivity {
 
     @Inject
     MovieListViewModel viewModel;
-
-    RecyclerView recyclerView;
-    MovieAdapter adapter;
-    ProgressBar progressBar;
-    View errorView;
+    private MovieAdapter adapter;
     private ErrorFragment errorFragment;
+    private ActivityMovieListBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ApplicationComponent component = DaggerApplicationComponent.create();
         component.injectInMovieListActivity(this);
 
-        setViews();
-
-        setMovieAdapter();
-        setErrorFragment();
-        configureRecyclerView();
-
-        setLoadingObserver();
-        setErrorMessageObserver();
-        setMovieListObserver();
+        setupView();
+        setupObservers();
 
         viewModel.getMovieList();
     }
-
-    private void setViews() {
-        setContentView(R.layout.activity_movie_list);
-        progressBar = findViewById(R.id.progressBar);
-        recyclerView = findViewById(R.id.movieListRecyclerView);
-        errorView = findViewById(R.id.errorView);
+    private void setupView() {
+        binding = ActivityMovieListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setupErrorFragment();
     }
 
-    private void configureRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
+    private void setupObservers() {
+        setupMovieListObserver();
+        setupErrorMessageObserver();
+        setupLoadingObserver();
     }
 
-    private void setMovieListObserver() {
+    private void setupMovieListObserver() {
         viewModel.getMovieListLiveData().observe(this, movieListData -> {
+                    setupMovieAdapter();
+                    configureRecyclerView();
                     adapter.updateData(movieListData);
-                    progressBar.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.GONE);
                 }
         );
     }
 
-    private void setErrorMessageObserver() {
+    private void setupErrorMessageObserver() {
         viewModel.getErrorMessageLiveData().observe(this, errorMessage -> {
             if (errorMessage.equals("")) {
-                errorView.setVisibility(View.GONE);
+                binding.errorView.setVisibility(View.GONE);
             } else {
-                errorView.setVisibility(View.VISIBLE);
+                binding.errorView.setVisibility(View.VISIBLE);
                 errorFragment.showError(errorMessage);
-                recyclerView.setVisibility(View.GONE);
-                progressBar.setVisibility(View.GONE);
+                binding. progressBar.setVisibility(View.GONE);
             }
         });
     }
 
-    private void setLoadingObserver() {
+    private void setupLoadingObserver() {
         viewModel.getIsLoading().observe(this, isLoading -> {
             if (isLoading) {
-                errorView.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
+                binding.errorView.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.VISIBLE);
             }
         });
     }
 
-    private void setMovieAdapter() {
+    private void configureRecyclerView() {
+        binding.movieListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.movieListRecyclerView.setAdapter(adapter);
+        binding.movieListRecyclerView.setHasFixedSize(true);
+    }
+
+    private void setupMovieAdapter() {
         adapter = new MovieAdapter(new ArrayList<>());
         adapter.setOnButtonClickListener(movieId -> {
             Intent intent = new Intent(getApplicationContext(), MovieDetailsActivity.class);
@@ -103,7 +99,7 @@ public class MovieListActivity extends AppCompatActivity {
         });
     }
 
-    private void setErrorFragment() {
+    private void setupErrorFragment() {
         errorFragment = new ErrorFragment(true);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.errorView, errorFragment)
