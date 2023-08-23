@@ -11,21 +11,21 @@ import io.reactivex.Observable;
 
 public class MovieRepositoryImpl implements MovieRepository {
 
-    final MoviesRemoteDataSource _moviesRemoteDataSource;
+    final MoviesRemoteDataSource moviesRemoteDataSource;
 
     public MovieRepositoryImpl(MoviesRemoteDataSource moviesRemoteDataSource) {
-        _moviesRemoteDataSource = moviesRemoteDataSource;
+        this.moviesRemoteDataSource = moviesRemoteDataSource;
     }
 
 
     @Override
     public Observable<MovieDetailsModel> getMovieDetails(int movieId){
-        return _moviesRemoteDataSource.getMovieDetails(movieId);
+        return moviesRemoteDataSource.getMovieDetails(movieId);
     }
 
     @Override
     public Observable<ArrayList<MovieModel>> getMovieList(){
-        return _moviesRemoteDataSource.getMovieList();
+        return moviesRemoteDataSource.getMovieList();
     }
 
 }

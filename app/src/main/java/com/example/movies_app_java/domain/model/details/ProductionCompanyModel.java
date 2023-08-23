@@ -1,5 +1,7 @@
 package com.example.movies_app_java.domain.model.details;
 
+import java.util.Objects;
+
 public class ProductionCompanyModel {
     private final Integer id;
     private final String logoUrl;
@@ -27,5 +29,16 @@ public class ProductionCompanyModel {
 
     public String getOriginCountry() {
         return originCountry;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductionCompanyModel that = (ProductionCompanyModel) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(logoUrl, that.logoUrl) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(originCountry, that.originCountry);
     }
 }

@@ -10,7 +10,8 @@ public class MovieModel {
     private final String releaseDate;
     private final ArrayList<String> genres;
 
-    public MovieModel(Integer id, Double voteAverage, String title, String imageUrl, String releaseDate, ArrayList<String> genres) {
+    public MovieModel(Integer id, Double voteAverage, String title, String imageUrl,
+                      String releaseDate, ArrayList<String> genres) {
         this.id = id;
         this.voteAverage = voteAverage;
         this.title = title;
@@ -41,5 +42,22 @@ public class MovieModel {
 
     public ArrayList<String> getGenres() {
         return genres;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        MovieModel other = (MovieModel) obj;
+        return id.equals(other.id) &&
+                voteAverage.equals(other.voteAverage) &&
+                title.equals(other.title) &&
+                imageUrl.equals(other.imageUrl) &&
+                releaseDate.equals(other.releaseDate) &&
+                genres.equals(other.genres);
     }
 }

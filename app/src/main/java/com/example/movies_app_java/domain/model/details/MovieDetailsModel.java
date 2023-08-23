@@ -1,6 +1,7 @@
 package com.example.movies_app_java.domain.model.details;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MovieDetailsModel {
     private final Boolean adult;
@@ -10,7 +11,7 @@ public class MovieDetailsModel {
     private final String originalLanguage;
     private final String originalTitle;
     private final String overview;
-    private final  String posterUrl;
+    private final String posterUrl;
     private final ArrayList<ProductionCompanyModel> productionCompanies;
     private final String releaseDate;
     private final Integer revenue;
@@ -101,5 +102,30 @@ public class MovieDetailsModel {
 
     public Double getVoteAverage() {
         return voteAverage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MovieDetailsModel that = (MovieDetailsModel) o;
+
+        if (!Objects.equals(adult, that.adult)) return false;
+        if (!Objects.equals(budget, that.budget)) return false;
+        if (!Objects.equals(genres, that.genres)) return false;
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(originalLanguage, that.originalLanguage)) return false;
+        if (!Objects.equals(originalTitle, that.originalTitle)) return false;
+        if (!Objects.equals(overview, that.overview)) return false;
+        if (!Objects.equals(posterUrl, that.posterUrl)) return false;
+        if (!Objects.equals(productionCompanies, that.productionCompanies)) return false;
+        if (!Objects.equals(releaseDate, that.releaseDate)) return false;
+        if (!Objects.equals(revenue, that.revenue)) return false;
+        if (!Objects.equals(runtime, that.runtime)) return false;
+        if (!Objects.equals(spokenLanguages, that.spokenLanguages)) return false;
+        if (!Objects.equals(status, that.status)) return false;
+        if (!Objects.equals(title, that.title)) return false;
+        return Objects.equals(voteAverage, that.voteAverage);
     }
 }

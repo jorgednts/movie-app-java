@@ -7,14 +7,14 @@ import io.reactivex.Observable;
 
 public class GetMovieDetailsUseCaseImpl implements GetMovieDetailsUseCase {
 
-    final MovieRepository _movieRepository;
+    final MovieRepository movieRepository;
 
     public GetMovieDetailsUseCaseImpl(MovieRepository movieRepository) {
-        _movieRepository = movieRepository;
+        this.movieRepository = movieRepository;
     }
 
     @Override
     public Observable<MovieDetailsModel> call(int movieId) {
-        return _movieRepository.getMovieDetails(movieId);
+        return movieRepository.getMovieDetails(movieId);
     }
 }

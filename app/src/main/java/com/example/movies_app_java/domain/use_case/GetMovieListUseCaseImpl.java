@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import io.reactivex.Observable;
 
 public class GetMovieListUseCaseImpl implements GetMovieListUseCase {
-    final MovieRepository _movieRepository;
+    private final MovieRepository movieRepository;
 
     public GetMovieListUseCaseImpl(MovieRepository movieRepository) {
-        _movieRepository = movieRepository;
+        this.movieRepository = movieRepository;
     }
 
     @Override
     public Observable<ArrayList<MovieModel>> call() {
-        return _movieRepository.getMovieList();
+        return movieRepository.getMovieList();
     }
 }
